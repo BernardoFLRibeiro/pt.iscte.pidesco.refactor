@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: Refactor
 Bundle-SymbolicName: pt.iscte.pidesco.refactor;singleton:=true
 Bundle-Version: 1.0.0.qualifier
-Bundle-Activator: pt.iscte.pidesco.refactor.Activator
+Bundle-Activator: pt.iscte.pidesco.refactorMain.Activator
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
  org.eclipse.swt;bundle-version="3.108.0",

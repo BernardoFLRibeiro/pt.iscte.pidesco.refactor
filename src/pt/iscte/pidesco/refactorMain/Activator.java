@@ -1,14 +1,13 @@
-package pt.iscte.pidesco.refactor;
+package pt.iscte.pidesco.refactorMain;
 
-import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 
-import pt.iscte.pidesco.internal.implementRename;
-import pt.iscte.pidesco.internal.refactoringServices;
 import pt.iscte.pidesco.javaeditor.service.JavaEditorServices;
 import pt.iscte.pidesco.projectbrowser.service.ProjectBrowserServices;
+import pt.iscte.pidesco.services.implementRename;
+import pt.iscte.pidesco.services.refactoringServices;
 
 public class Activator implements BundleActivator {
 

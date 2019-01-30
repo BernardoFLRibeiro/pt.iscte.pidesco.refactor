@@ -6,7 +6,7 @@
          name="Refactor View"
          point="pt.iscte.pidesco.view">
       <view
-            class="pt.iscte.pidesco.refactor.RefactorView"
+            class="pt.iscte.pidesco.refactorMain.RefactorView"
             icon="icon.png">
       </view>
    </extension>

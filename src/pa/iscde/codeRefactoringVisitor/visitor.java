@@ -23,7 +23,7 @@ import org.eclipse.jdt.core.dom.TypeDeclaration;
 import org.eclipse.jdt.core.dom.VariableDeclarationFragment;
 import org.eclipse.jdt.core.dom.WhileStatement;
 
-import pt.iscte.pidesco.refactor.Nodeobject;
+import pt.iscte.pidesco.refactorMain.Nodeobject;
 
 public class visitor extends ASTVisitor {
 
