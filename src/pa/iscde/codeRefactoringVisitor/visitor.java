@@ -19,6 +19,7 @@ import org.eclipse.jdt.core.dom.PostfixExpression;
 import org.eclipse.jdt.core.dom.PrefixExpression;
 import org.eclipse.jdt.core.dom.SimpleName;
 import org.eclipse.jdt.core.dom.SingleVariableDeclaration;
+import org.eclipse.jdt.core.dom.TypeDeclaration;
 import org.eclipse.jdt.core.dom.VariableDeclarationFragment;
 import org.eclipse.jdt.core.dom.WhileStatement;
 
@@ -28,13 +29,25 @@ public class visitor extends ASTVisitor {
 
 	private String textSelected;
 	private ArrayList<Nodeobject> nodelist;
+	private int classPosition;
+	private boolean changeClass;
 
 	public visitor(String textSelected, ArrayList<Nodeobject> nodelist) {
-
+		changeClass = false;
 		this.textSelected = textSelected;
 		this.nodelist = nodelist;
 	}
 
+	
+	public boolean getchangeClass() {
+		return changeClass;
+	}
+	
+	
+	private static int sourceLine(ASTNode node) {
+		return ((CompilationUnit) node.getRoot()).getLineNumber(node.getStartPosition());
+	}
+	
 	private void addNode(String name, int lineNumber, int startPosition) {
 
 		if (textSelected.equals(name)) {
@@ -45,13 +58,25 @@ public class visitor extends ASTVisitor {
 				}
 			}
 			if (!found) {
+				if (classPosition == startPosition) {
+					changeClass = true;
+				}
+
 				nodelist.add(new Nodeobject(lineNumber, startPosition));
 			}
 		}
 	}
 
-	private static int sourceLine(ASTNode node) {
-		return ((CompilationUnit) node.getRoot()).getLineNumber(node.getStartPosition());
+	
+	
+	
+
+	@Override
+	public boolean visit(TypeDeclaration node) {
+		SimpleName name = node.getName();
+		classPosition = name.getStartPosition();
+		addNode(name.toString(), sourceLine(name), classPosition);
+		return super.visit(node);
 	}
 
 	@Override
@@ -103,7 +128,7 @@ public class visitor extends ASTVisitor {
 				if (leftSide.toString().contains("this.")) {
 					diff = 5;
 				}
-
+				
 				addNode(left, sourceLine(leftSide), leftSide.getStartPosition() + diff);
 
 				addNode(rightSide.toString(), sourceLine(rightSide), rightSide.getStartPosition());
@@ -148,12 +173,9 @@ public class visitor extends ASTVisitor {
 			@Override
 			public boolean visit(EnhancedForStatement node) {
 
-				
-				
-				
 				Expression ex = node.getExpression();
 				addNode(ex.toString(), sourceLine(ex), ex.getStartPosition());
-				
+
 				SimpleName variable = node.getParameter().getName();
 				addNode(variable.toString(), sourceLine(variable), variable.getStartPosition());
 
@@ -194,6 +216,8 @@ public class visitor extends ASTVisitor {
 		}
 
 		if ((!(node.getExpression() == null))) {
+			
+			
 			addNode(node.getExpression().toString(), sourceLine(node), node.getExpression().getStartPosition());
 		}
 
@@ -208,7 +232,6 @@ public class visitor extends ASTVisitor {
 	@Override
 	public boolean visit(ArrayAccess node) {
 		addNode(node.getArray().toString(), sourceLine(node.getArray()), node.getArray().getStartPosition());
-		System.out.println(node.toString() + " -  " + node.getIndex());
 		addNode(node.getIndex().toString(), sourceLine(node), node.getIndex().getStartPosition());
 		return super.visit(node);
 	}

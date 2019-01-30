@@ -13,14 +13,17 @@ public class controlerVisitor {
 
 	private ArrayList<Nodeobject> nodelist;
 
+	private visitor visitor;
+
 	public controlerVisitor(File file, ITextSelection textSelected) {
 		nodelist = new ArrayList<Nodeobject>();
 		run(file, textSelected);
 	}
 
 	private void run(File file, ITextSelection textSelected) {
-		
-		javaParser.parse(file, new visitor(textSelected.getText(), nodelist));
+		visitor = new visitor(textSelected.getText(), nodelist);
+
+		javaParser.parse(file, visitor);
 
 		Collections.sort(nodelist, new Comparator<Nodeobject>() {
 
@@ -32,14 +35,12 @@ public class controlerVisitor {
 
 	}
 
+	public boolean getchangeClass() {
+		return visitor.getchangeClass();
+	}
+
 	public ArrayList<Nodeobject> getList() {
 		return nodelist;
 	}
-	
-	
-	
-	
-	
-	
 
 }

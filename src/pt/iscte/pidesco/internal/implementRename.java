@@ -24,7 +24,24 @@ public class implementRename implements refactoringServices {
 		String textSelected = iText.getText();
 		if (!(textSelected.isEmpty()) && !(textSelected.equals(null))) {
 
-			writeinFile(new controlerVisitor(f, iText).getList(), iText, newName);
+			
+			controlerVisitor ctrlVisitor = new controlerVisitor(f, iText);
+			
+			 writeinFile(ctrlVisitor.getList(), iText, newName);
+			
+			if(ctrlVisitor.getchangeClass()) {
+				
+				String path = f.getAbsolutePath();
+				path = path.replace(textSelected + ".java", newName + ".java");
+				File nfile = new File(path);
+				f.renameTo(nfile);
+				
+			}
+			javaServ.saveFile(javaServ.getOpenedFile());
+			
+			
+			
+			
 		}
 	}
 
@@ -44,7 +61,7 @@ public class implementRename implements refactoringServices {
 			first = false;
 		}
 
-		javaServ.saveFile(javaServ.getOpenedFile());
+		//javaServ.saveFile(javaServ.getOpenedFile());
 	}
 
 }
