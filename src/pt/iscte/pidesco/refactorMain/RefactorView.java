@@ -3,6 +3,10 @@ package pt.iscte.pidesco.refactorMain;
 import java.io.File;
 import java.util.Map;
 
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IConfigurationElement;
+import org.eclipse.core.runtime.IExtensionRegistry;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.jface.text.ITextSelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionEvent;
@@ -15,6 +19,7 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Text;
 
+import pa.iscde.pidesco.ExtensionPoint.extensionRefactor;
 import pt.iscte.pidesco.extensibility.PidescoView;
 import pt.iscte.pidesco.javaeditor.service.JavaEditorServices;
 
@@ -46,6 +51,8 @@ public class RefactorView implements PidescoView {
 		button.setText(" Rename");
 
 		javaServ = Activator.getJavaEditorServices();
+
+		regExtensionPoints();
 
 		button.addSelectionListener(new SelectionListener() {
 
@@ -84,6 +91,22 @@ public class RefactorView implements PidescoView {
 			public void widgetDefaultSelected(SelectionEvent e) {
 			}
 		});
+
+	}
+
+	private void regExtensionPoints() {
+
+		IExtensionRegistry reg = Platform.getExtensionRegistry();
+		IConfigurationElement[] elementslist = reg.getConfigurationElementsFor("pt.iscte.pidesco.refactor.extensionID");
+		for (IConfigurationElement element : elementslist) {
+			try {
+				extensionRefactor extensionObject = (extensionRefactor) element.createExecutableExtension("class");
+				extensionObject.run1();
+				extensionObject.run2();
+			} catch (CoreException e) {
+				e.printStackTrace();
+			}
+		}
 
 	}
 
